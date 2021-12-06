@@ -1,0 +1,92 @@
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+  <p id="output"></p>
+  <p id="result"></p>
+  <script>
+    var nums = [
+      72, 86, 73, 66, 37, 76, 19, 40, 77, 42, 48, 62, 46, 3, 95, 17, 97, 41, 10,
+      14, 83, 90, 12, 23, 81, 98, 11, 57, 13, 69, 28, 63, 5, 78, 79, 58, 54, 67,
+      60, 34, 39, 84, 94, 29, 20, 0, 24, 38, 43, 51, 64, 18, 27, 52, 47, 74, 59,
+      22, 85, 65, 80, 2, 99, 70, 33, 91, 53, 93, 9, 82, 8, 50, 7, 56, 30, 36,
+      89, 71, 21, 49, 31, 88, 26, 96, 16, 1, 75, 87, 6, 61, 4, 68, 32, 25, 55,
+      44, 15, 45, 92, 35,
+    ];
+
+    function transposeArray(array, arrayLength) {
+      var newArray = [];
+      for (var i = 0; i < array.length; i++) {
+        newArray.push([]);
+      }
+
+      for (var i = 0; i < array.length; i++) {
+        for (var j = 0; j < arrayLength; j++) {
+          newArray[j].push(array[i][j]);
+        }
+      }
+
+      return newArray;
+    }
+
+    function sumRemainingUncalled(winning, called) {
+      var sum = 0;
+      for (var i = 0; i < winning.length; i++) {
+        for (var j = 0; j < winning.length; j++) {
+          console.log(winning[i][j]);
+          console.log(called.includes(winning[i][j]));
+          if (!called.includes(winning[i][j])) {
+            sum += winning[i][j];
+          }
+        }
+      }
+      return sum;
+    }
+
+    function isWinningLine(line, calledNumbers) {
+      var i = 0;
+
+      for (const numb of line) {
+        if (calledNumbers.includes(numb)) {
+          i = i + 1;
+        }
+      }
+
+      if (i == 5) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    function getWinningLines(lines, calledNumbers) {
+      for (const line of lines) {
+        if (isWinningLine(line, calledNumbers)) {
+          console.log(line);
+          //break;
+        }
+      }
+    }
+
+    function readFile() {
+      $.get("inputboards.txt", function (data) {
+        var items = data.split("\n").map(function (el) {
+          return el
+            .split(/ +/)
+            .filter((n) => n)
+            .map(Number);
+        });
+        //console.log(items);
+        $("#result").text(JSON.stringify(items));
+
+        for (let i = 0; i < nums.length; i++) {
+          console.log(nums[i]);
+
+          console.log("horizontal");
+          getWinningLines(items, nums.slice(0, i + 1));
+        }
+      });
+    }
+    readFile();
+  </script>
+</body>
